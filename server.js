@@ -21,8 +21,8 @@ app.use('/filebox', express.static('filebox'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(multer({ dest: '/tmp/' }).array('image'));
 
-app.get('/index.htm', function (req, res) {
-   res.sendFile(__dirname + "/" + "index.htm");
+app.get('/index.html', function (req, res) {
+   res.sendFile(__dirname + "/" + "index.html");
 })
 
 app.get('/', function (req, res) {
@@ -88,3 +88,9 @@ app.post('/file_upload', function (req, res) {
 
 })
 
+app.get("/buttonClicked",function(req,res){
+   console.log(req.query.value); //get param 
+   var data = "send to client"
+   res.send(data);
+   res.end();
+})

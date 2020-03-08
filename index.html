@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script>
+   function copyText(){
+       $.get('/filelist','',function(res){
+           console.log(res)
+          
+           res.forEach(element => {
+            var li = document.createElement('li')
+            li.append(element)
+            $("#temp").append('<p>'+element+'</p>')
+           });
+         
+       })
+   }
+</script>
+</head>
+<body id='tp'>
+    <h3>文件上传：</h3>
+    选择一个文件上传: <br />
+    <form action="/file_upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" size="50" />
+        <br />
+        <input type="submit" value="上传文件" />
+    </form>
+
+ <button onclick="copyText()">显示文件列表</button>
+ <ol id='temp'>
+ </ol>
+
+</body>
+</html>
