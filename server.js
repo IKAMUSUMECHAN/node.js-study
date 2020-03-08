@@ -52,7 +52,7 @@ app.post('/process_post', urlencodedParser, function (req, res) {
    console.log(response);
    //res.end(JSON.stringify(response));
    if (req.body.first_name == 123 && req.body.last_name == 123) {
-      res.redirect('index.htm')
+      res.redirect('index.html')
    } else {
       res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
       res.end('账号密码错误');
