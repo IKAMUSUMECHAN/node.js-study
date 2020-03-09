@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var fs = require("fs");
 
+
 var bodyParser = require('body-parser');
 var multer = require('multer');
 
@@ -29,21 +30,10 @@ app.get('/', function (req, res) {
    res.sendFile(__dirname + "/" + "post.htm");
 })
 
-app.get('/filelist', function (req, res) {
-   console.log("查看 /filebox 目录");
-   fs.readdir("filebox", function (err, files) {
-      if (err) {
-         return console.error(err);
-      }
-      files.forEach(function (file) {
-         console.log(file);
-      });
-      res.send(files);
-   });
-})
+
+
 
 app.post('/process_post', urlencodedParser, function (req, res) {
-
    // 输出 JSON 格式
    var response = {
       "first_name": req.body.first_name,
@@ -60,7 +50,6 @@ app.post('/process_post', urlencodedParser, function (req, res) {
 
 })
 
-
 app.post('/file_upload', function (req, res) {
 
    console.log(req.files[0]);  // 上传的文件信息
@@ -70,23 +59,42 @@ app.post('/file_upload', function (req, res) {
       fs.writeFile(des_file, data, function (err) {
          if (err) {
             console.log(err);
+            res.json('错误');
          } else {
             response = {
                message: 'File uploaded successfully',
                filename: req.files[0].originalname
             };
+            res.redirect('index.html')
          }
-         console.log(response);
-         res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
-         console.log(JSON.stringify(response));
-         res.end('上传成功');
-         
-      });
+         console.log(response); 
 
+      });
    });
 
-
 })
+
+
+app.get('/filelist', function (req, res) {
+
+   console.log("查看 /filebox 目录");
+   fs.readdir("filebox", function (err, files) {
+      if (err) {
+         return console.error(err);
+      }else{
+         files.forEach(function (file) {
+            console.log(file);
+         });
+      }
+      res.send(files);
+   });
+})
+
+app.get('/download', function (req, res) {
+   res.redirect('filebox/back.png"')
+   //res.sendFile(__dirname + "/filebox/" + "back.png");
+})
+
 
 app.get("/buttonClicked",function(req,res){
    console.log(req.query.value); //get param 

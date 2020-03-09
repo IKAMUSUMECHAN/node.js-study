@@ -6,16 +6,31 @@
    function copyText(){
        $.get('/filelist','',function(res){
            console.log(res)
-          
            res.forEach(element => {
             var li = document.createElement('li')
             li.append(element)
-            $("#temp").append('<p>'+element+'</p>')
+            $("#temp").append('<a href="filebox/'+element+'">'+element+'</a>'+'<br>')
            });
          
        })
    }
 </script>
+
+<script>
+    function download(){
+        $.get('/download','',function(res){
+            console.log(res)     
+        })
+    }
+ </script>
+
+<script>
+    function clicked(){
+        alert('上传');
+    }
+ </script>
+
+
 </head>
 <body id='tp'>
     <h3>文件上传：</h3>
@@ -23,10 +38,10 @@
     <form action="/file_upload" method="post" enctype="multipart/form-data">
         <input type="file" name="image" size="50" />
         <br />
-        <input type="submit" value="上传文件" />
+        <input type="submit" onclick="clicked()" value="上传文件" />
     </form>
-
- <button onclick="copyText()">显示文件列表</button>
+    <h3>文件查看：</h3>
+ <button ondblclick="copyText()">双击显示文件列表</button>
  <ol id='temp'>
  </ol>
 
