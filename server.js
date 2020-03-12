@@ -2,6 +2,9 @@ var express = require('express');
 var app = express();
 var fs = require("fs");
 
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/";
+
 
 var bodyParser = require('body-parser');
 var multer = require('multer');
@@ -41,12 +44,37 @@ app.post('/process_post', urlencodedParser, function (req, res) {
    };
    console.log(response);
    //res.end(JSON.stringify(response));
-   if (req.body.first_name == 123 && req.body.last_name == 123) {
+  /**  if (req.body.first_name == 123 && req.body.last_name == 123) {
       res.redirect('index.html')
    } else {
       res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
       res.end('账号密码错误');
-   }
+   }*/
+   MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
+      if (err) throw err;
+      var dbo = db.db("fileupload");
+       var whereStr = {"name":req.body.first_name};  // 查询条件
+
+      dbo.collection("users").find(whereStr).toArray(function(err, result) {
+          if (err) {throw err}
+         
+        else if(result[0]==undefined){
+            res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
+            res.end('账号不存在');
+         }
+        else if (result[0].psw==req.body.last_name){
+           console.log("success");
+           res.redirect('index.html');
+        }
+        else if (result[0].psw!=req.body.last_name){
+         console.log("fail");
+         res.writeHead(200, { 'Content-Type': 'text/html;charset=utf-8' });
+         res.end('密码错误');
+      }
+        console.log(result);
+        db.close();
+      });
+  });
 
 })
 
